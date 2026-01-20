@@ -17,7 +17,7 @@ from PIL import Image
 import numpy as np
 
 # Configuration
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "best_effnetb0.pth")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "models", "best_effnetb0.pth")
 IMAGE_SIZE = (224, 224)  # EfficientNet-B0 input size
 DEVICE = torch.device("cpu")  # CPU only
 
@@ -201,4 +201,4 @@ async def predict(file: UploadFile = File(...)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
