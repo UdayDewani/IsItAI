@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -7,6 +7,15 @@ function App() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [dragActive, setDragActive] = useState(false)
+  const [isDark, setIsDark] = useState(true)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+  }, [isDark])
+
+  const toggleTheme = () => {
+    setIsDark(!isDark)
+  }
 
   const handleFile = useCallback((file) => {
     if (file && file.type.startsWith('image/')) {
@@ -76,15 +85,23 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <div className="container">
-        <header className="header">
-          <div className="logo">
-            <span className="logo-icon">🔍</span>
-            <h1>Deepfake Detector</h1>
+    <div className={`app ${isDark ? 'dark' : 'light'}`}>
+      {/* Top Navigation Bar */}
+      <nav className="navbar">
+        <div className="nav-logo">
+          <span className="logo-icon">🤖</span>
+          <span className="logo-text">IsitAI</span>
+        </div>
+        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+          <div className="toggle-track">
+            <span className="toggle-icon sun">☀️</span>
+            <span className="toggle-icon moon">🌙</span>
+            <div className="toggle-thumb"></div>
           </div>
-          <p className="subtitle">Upload an image to detect if it's AI-generated or manipulated</p>
-        </header>
+        </button>
+      </nav>
+
+      <div className="container">
 
         <main className="main">
           {!preview ? (
@@ -103,10 +120,9 @@ function App() {
                 hidden
               />
               <label htmlFor="file-input" className="upload-label">
-                <div className="upload-icon">📁</div>
-                <p className="upload-text">Drag & drop an image here</p>
-                <p className="upload-subtext">or click to browse</p>
-                <span className="upload-formats">Supports: JPG, PNG, WebP</span>
+                <div className="upload-icon">☁️</div>
+                <p className="upload-text">Drop image here</p>
+                <span className="upload-formats">JPG, PNG, WebP</span>
               </label>
             </div>
           ) : (
@@ -182,9 +198,6 @@ function App() {
           )}
         </main>
 
-        <footer className="footer">
-          <p>Powered by EfficientNet-B0 • Built with React & FastAPI</p>
-        </footer>
       </div>
     </div>
   )
